@@ -23,7 +23,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         @Override
         public void onReceived(MqttMessage message) {
-            System.out.println("message: " + new String(message.getPayload()));
+            System.out.println("Received message: " + new String(message.getPayload()));
         }
 
     });
@@ -40,21 +40,21 @@ public class MainFrame extends javax.swing.JFrame {
 
             mqttClientWrapper.initialize(publisherId);
 
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-
-                    while (true) {
-                        enviar(publisherId + " " + new Date().toString());
-                        try {
-                            Thread.sleep(3000);
-                        } catch (InterruptedException ex) {
-                            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-
-                }
-            }).start();
+//            new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//
+//                    while (true) {
+//                        enviar(publisherId + " " + new Date().toString());
+//                        try {
+//                            Thread.sleep(3000);
+//                        } catch (InterruptedException ex) {
+//                            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+//                        }
+//                    }
+//
+//                }
+//            }).start();
 
         } catch (MqttException ex) {
             JOptionPane.showMessageDialog(rootPane, ex);
@@ -68,9 +68,9 @@ public class MainFrame extends javax.swing.JFrame {
         try {
             mqttClientWrapper.enviar(text);
         } catch (MqttClientWrapper.NotConnectedException e) {
-//            JOptionPane.showMessageDialog(rootPane, "No conectado aun...");
+            JOptionPane.showMessageDialog(rootPane, "No conectado aun...");
         } catch (Exception ex) {
-//            JOptionPane.showMessageDialog(rootPane, "Error desconocido: " + ex);
+            JOptionPane.showMessageDialog(rootPane, "Error desconocido: " + ex);
         }
 
     }
@@ -137,6 +137,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         mqttClientWrapper.disconnect();
+        System.exit(0);
     }//GEN-LAST:event_formWindowClosing
 
     private void txtMessageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMessageActionPerformed

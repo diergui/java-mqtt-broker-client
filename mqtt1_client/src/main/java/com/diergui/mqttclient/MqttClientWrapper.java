@@ -59,9 +59,9 @@ public class MqttClientWrapper {
                             options.setCleanSession(false);
                             options.setConnectionTimeout(10);
 
-                            System.out.println("paho-client connecting to broker: " + broker);
+                            System.out.println("paho-client Connecting to broker: " + broker);
                             sampleClient.connect(options);
-                            System.out.println("paho-client connected to broker " + sampleClient.getClientId());
+                            System.out.println("paho-client Connected to broker " + sampleClient.getClientId());
 
                             sampleClient.subscribe(topic, new IMqttMessageListener() {
                                 @Override
@@ -91,7 +91,7 @@ public class MqttClientWrapper {
                         } catch (Exception e) {
                             e.printStackTrace();
                             try {
-                                System.err.println("Reconnecting in 5000 ms...");
+                                System.err.println("paho-client Reconnecting in 5000 ms...");
                                 Thread.sleep(5000);
                             } catch (InterruptedException ex) {
                             }
@@ -109,7 +109,7 @@ public class MqttClientWrapper {
             try {
                 keepDisconnected = true;
                 sampleClient.disconnect();
-                System.out.println("paho-client disconnected");
+                System.out.println("paho-client Disconnected");
             } catch (MqttException ex) {
                 ex.printStackTrace();
             }
@@ -123,7 +123,7 @@ public class MqttClientWrapper {
 
             if (sampleClient.isConnected()) {
 
-                System.out.println("paho-client publishing message: " + text);
+                System.out.println("paho-client Publishing message: " + text);
 
                 final MqttMessage message = new MqttMessage(text.getBytes());
                 message.setQos(qos);

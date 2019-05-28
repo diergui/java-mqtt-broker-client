@@ -25,27 +25,6 @@ public class Main {
     public static final String ENCODING = "UTF-8";
     public static Charset enconding;
 
-    static class PublisherListener extends AbstractInterceptHandler {
-
-        @Override
-        public void onPublish(InterceptPublishMessage message) {
-            final ByteBuf payload = message.getPayload();
-
-            final String dec = payload.hasArray() ? new String(payload.array()) : payload.toString(enconding);
-            System.out.println("REC: \n"
-                    + "Client: " + message.getClientID() + "\n"
-                    + "Topic: " + message.getTopicName() + "\n"
-                    + "Content: " + dec);
-            System.out.println(dec);
-        }
-
-        @Override
-        public String getID() {
-            return "listener";
-        }
-
-    }
-
     public static void main(String[] args) throws InterruptedException, IOException {
         enconding = Charset.forName(ENCODING);
         IResourceLoader classpathLoader = new ClasspathResourceLoader();
@@ -56,16 +35,41 @@ public class Main {
         final List<? extends InterceptHandler> userHandlers = Arrays.asList(new PublisherListener());
         mqttBroker.startServer(classPathConfig, userHandlers);
 
-        System.out.println("moquette mqtt broker started, press ctrl-c to shutdown..");
+        System.out.println("Moquette mqtt broker started, press ctrl-c to shutdown..");
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
-                System.out.println("stopping moquette mqtt broker..");
+                System.out.println("Stopping moquette mqtt broker..");
                 mqttBroker.stopServer();
-                System.out.println("moquette mqtt broker stopped");
+                System.out.println("Moquette mqtt broker stopped");
             }
         });
 
     }
+    
+    static class PublisherListener extends AbstractInterceptHandler {
+
+        @Override
+        public void onPublish(InterceptPublishMessage message) {
+            final ByteBuf payload = message.getPayload();
+
+            final String dec = payload.hasArray() ? new String(payload.array()) : payload.toString(enconding);
+            
+            System.out.println(
+                    "RECEIVED: \n"
+                    + "   Client: " + message.getClientID() + "\n"
+                    + "   Topic: " + message.getTopicName() + "\n"
+                    + "   Content: " + dec + "\n"
+                    + "---------------------------------------------------------------\n"
+            );
+
+        }
+
+        @Override
+        public String getID() {
+            return "listener";
+        }
+
+    }    
 }
